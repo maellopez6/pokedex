@@ -1,0 +1,103 @@
+{
+  "Functional Component With Props": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rpfc",
+    "body": [
+      "interface Props {",
+      "}",
+      "",
+      "const $1: React.FC<Props> = ({}) => {",
+      "  return ($2);",
+      "};",
+      "",
+      "export default $1;",
+    ]
+  },
+	"Functional Component Without Props": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rfc",
+    "body": [
+      "const $1 = () => {",
+      "  return ($2);",
+      "};",
+      "",
+      "export default $1;",
+    ]
+  },
+  "UseEffect": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rue",
+    "body": [
+      "useEffect(() => {",
+      "  $1",
+      "}, [$2]);"
+    ]
+  },
+  "RTK Slice": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rtkslice",
+    "body": [
+      "import { createSlice, PayloadAction } from '@reduxjs/toolkit';",
+      "",
+      "interface $1State {",
+      "  $2: $3;",
+      "}",
+      "",
+      "const initialState: $1State = {",
+      "  $2: $4",
+      "};",
+      "",
+      "const $1Slice = createSlice({",
+      "  name: '$1',",
+      "  initialState,",
+      "  reducers: {",
+      "    set$5: (state, action: PayloadAction<$3>) => {",
+      "      state.$2 = action.payload;",
+      "    }",
+      "  }",
+      "});",
+      "",
+      "export const { set$5 } = $1Slice.actions;",
+      "export default $1Slice.reducer;"
+    ]
+  },
+  "RTK Query API Slice": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rtkapi",
+    "body": [
+      "import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';",
+      "",
+      "export const $1Api = createApi({",
+      "  reducerPath: '$1Api',",
+      "  baseQuery: fetchBaseQuery({ baseUrl: '$2' }),",
+      "  endpoints: (builder) => ({",
+      "",
+      "  }),",
+      "});",
+      "",
+      "export const { } = $1Api;"
+    ]
+  },
+  "RTK Dispatch Hook": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rtkdispatch",
+    "body": [
+      "import { useDispatch } from 'react-redux';",
+      "import { AppDispatch } from '../store/store';",
+      "",
+      "export const useAppDispatch = () => useDispatch<AppDispatch>();",
+      ""
+    ]
+  },
+  "RTK Selector Hook": {
+    "scope": "typescript, typescriptreact",
+    "prefix": "rtkselector",
+    "body": [
+      "import { TypedUseSelectorHook, useSelector } from 'react-redux';",
+      "import { RootState } from '../store/store';",
+      "",
+      "export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;",
+      ""
+    ]
+  },
+}
