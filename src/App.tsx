@@ -1,19 +1,18 @@
 import { useState } from "react";
-import "./App.css";
 import TrainerForm from "./components/TrainerForm";
-import type { ITrainer } from "./types/trainer.type";
 import TrainerSelector from "./components/TrainerSelector";
 import BaasicPokemonList from "./components/BaasicPokemonList";
+import type { ITrainer } from "./types/trainer.type";
 
 function App() {
   const [arrayOfTrainers, setArrayOfTrainers] = useState<ITrainer[]>([]);
 
   return (
-    <>
+    <div>
       <TrainerSelector arrayOfTrainers={arrayOfTrainers} />
       <TrainerForm getter={arrayOfTrainers} setter={setArrayOfTrainers} />
       <BaasicPokemonList />
-    </>
+    </div>
   );
 }
 
