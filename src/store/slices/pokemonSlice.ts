@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { IPokemonData } from "../types/pokemon.type";
+import type { IPokemonData } from "../../types/pokemon.type";
 
 interface PokemonState {
   list: IPokemonData[];

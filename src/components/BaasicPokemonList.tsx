@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PokemonCard from "./PokemonCard";
 import type { IPokemonData } from "../types/pokemon.type";
-import { useGetPokemonsQuery } from "../store/pokemonApi";
-import { Link } from "react-router-dom";
 
 // Couleurs par type
 const typeColors: { [key: string]: string } = {
@@ -29,8 +27,9 @@ const typeColors: { [key: string]: string } = {
 export default function BaasicPokemonList() {
   const [data, setData] = useState<IPokemonData[]>([]);
   const [search, setSearch] = useState<string>("");
-  const [selectedPokemon, setSelectedPokemon] = useState<IPokemonData | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
+  // Fetch Pokémon
   useEffect(() => {
     (async () => {
       try {
@@ -45,11 +44,34 @@ export default function BaasicPokemonList() {
     })();
   }, []);
 
+  // Filtre par recherche
   const filteredData = data.filter(
     (pokemon) =>
       pokemon.name.fr &&
       pokemon.name.fr.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Popup navigation
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (selectedIndex === null) return;
+      if (e.key === "ArrowLeft") {
+        setSelectedIndex((prev) => (prev! > 0 ? prev! - 1 : prev));
+      } else if (e.key === "ArrowRight") {
+        setSelectedIndex((prev) => (prev! < filteredData.length - 1 ? prev! + 1 : prev));
+      } else if (e.key === "Escape") {
+        setSelectedIndex(null);
+      }
+    },
+    [selectedIndex, filteredData.length]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
+
+  const selectedPokemon = selectedIndex !== null ? filteredData[selectedIndex] : null;
 
   return (
     <div style={{ padding: 16 }}>
@@ -69,7 +91,7 @@ export default function BaasicPokemonList() {
         }}
       />
 
-      {/* Grille */}
+      {/* Grille responsive */}
       <div
         style={{
           display: "grid",
@@ -77,17 +99,18 @@ export default function BaasicPokemonList() {
           gap: 16,
         }}
       >
-        {filteredData.map((pokemon) => (
-          <div key={pokemon.pokedex_id} onClick={() => setSelectedPokemon(pokemon)}>
-            <Link to={"/pokemon/"+pokemon.pokedex_id} >
-             <PokemonCard
+        {filteredData.map((pokemon, index) => (
+          <div
+            key={pokemon.pokedex_id}
+            onClick={() => setSelectedIndex(index)}
+            style={{ cursor: "pointer", transition: "transform 0.2s" }}
+          >
+            <PokemonCard
               name={pokemon.name.fr ?? "Nom inconnu"}
               image={pokemon.sprites.regular ?? ""}
               types={pokemon.types ?? []}
               typeColors={typeColors}
             />
-            </Link>
-            
           </div>
         ))}
       </div>
@@ -106,16 +129,17 @@ export default function BaasicPokemonList() {
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
+            padding: 16,
           }}
-          onClick={() => setSelectedPokemon(null)}
+          onClick={() => setSelectedIndex(null)}
         >
           <div
             style={{
               backgroundColor: "#fff",
               borderRadius: 12,
               padding: 24,
-              maxWidth: 450,
-              width: "90%",
+              maxWidth: 500,
+              width: "100%",
               position: "relative",
               textAlign: "center",
               overflowY: "auto",
@@ -125,7 +149,7 @@ export default function BaasicPokemonList() {
           >
             {/* Bouton fermer */}
             <button
-              onClick={() => setSelectedPokemon(null)}
+              onClick={() => setSelectedIndex(null)}
               style={{
                 position: "absolute",
                 top: 8,
@@ -143,7 +167,12 @@ export default function BaasicPokemonList() {
             <img
               src={selectedPokemon.sprites.regular ?? ""}
               alt={selectedPokemon.name.fr}
-              style={{ width: 140, height: 140, objectFit: "contain", marginBottom: 12 }}
+              style={{
+                width: 140,
+                height: 140,
+                objectFit: "contain",
+                marginBottom: 12,
+              }}
             />
             <h2 style={{ marginBottom: 8 }}>{selectedPokemon.name.fr}</h2>
 
