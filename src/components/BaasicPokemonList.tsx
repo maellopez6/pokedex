@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 import type { IPokemonData } from "../types/pokemon.type";
+import { useGetPokemonsQuery } from "../store/pokemonApi";
+import { Link } from "react-router-dom";
 
 // Couleurs par type
 const typeColors: { [key: string]: string } = {
@@ -77,12 +79,15 @@ export default function BaasicPokemonList() {
       >
         {filteredData.map((pokemon) => (
           <div key={pokemon.pokedex_id} onClick={() => setSelectedPokemon(pokemon)}>
-            <PokemonCard
+            <Link to={"/pokemon/"+pokemon.pokedex_id} >
+             <PokemonCard
               name={pokemon.name.fr ?? "Nom inconnu"}
               image={pokemon.sprites.regular ?? ""}
               types={pokemon.types ?? []}
               typeColors={typeColors}
             />
+            </Link>
+            
           </div>
         ))}
       </div>

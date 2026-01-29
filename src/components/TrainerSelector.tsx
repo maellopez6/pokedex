@@ -12,7 +12,7 @@ const TrainerSelector: React.FC<Props> = ({ arrayOfTrainers }) => {
 
   useEffect(() => {
     if (currentTrainer === null) {
-      alert("Please select a trainer to proceed.");
+      return
     }
   }, [arrayOfTrainers, currentTrainer]);
 
