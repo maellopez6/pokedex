@@ -12,7 +12,7 @@ export default function PokemonDetailedView() {
       if (!pokeId) return;
 
       try {
-        const res = await fetch("https://tyradex.vercel.app/api/v1/pokemon");
+        const res = await fetch("https://tyradex.app/api/v1/pokemon");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
         const allPokemon: IPokemonData[] = await res.json();

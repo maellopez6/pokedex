@@ -1,4 +1,7 @@
+import React, { useState } from "react";
+
 interface PokemonCardProps {
+  id: number; // ⚠️ IMPORTANT → ajoute id
   name: string;
   image: string;
   types: { name: string }[];
@@ -6,13 +9,18 @@ interface PokemonCardProps {
 }
 
 const PokemonCard: React.FC<PokemonCardProps> = ({
+  id,
   name,
   image,
   types,
   typeColors,
 }) => {
+  const [isShiny, setIsShiny] = useState(false);
+
   const firstType = types.length > 0 ? types[0].name : null;
   const bgColor = firstType ? typeColors[firstType] ?? "#f0f0f0" : "#f0f0f0";
+
+  const shinyImage = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/${id}.png`;
 
   return (
     <div
@@ -24,14 +32,37 @@ const PokemonCard: React.FC<PokemonCardProps> = ({
         boxShadow: "0 4px 8px rgba(0,0,0,0.12)",
         transition: "transform 0.2s",
         cursor: "pointer",
+        position: "relative", // ✅ nécessaire pour badge
       }}
     >
+      {/* BADGE SHINY */}
+      <div
+        onClick={(e) => {
+          e.stopPropagation(); // évite de déclencher le clic carte
+          setIsShiny(!isShiny);
+        }}
+        style={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          backgroundColor: "#FFD700",
+          color: "#000",
+          fontWeight: 700,
+          fontSize: 11,
+          padding: "4px 6px",
+          borderRadius: 6,
+          cursor: "pointer",
+        }}
+      >
+        ✨ SHINY
+      </div>
+
       <img
-        src={image || ""}
+        src={isShiny ? shinyImage : image || ""}
         alt={name}
         style={{
-          width: 96,
-          height: 96,
+          width: 130,
+          height: 130,
           objectFit: "contain",
           marginBottom: 8,
         }}

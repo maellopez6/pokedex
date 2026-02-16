@@ -33,7 +33,7 @@ export default function BaasicPokemonList() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("https://tyradex.vercel.app/api/v1/pokemon");
+        const res = await fetch("https://tyradex.app/api/v1/pokemon");
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         setData(json);
@@ -106,6 +106,8 @@ export default function BaasicPokemonList() {
             style={{ cursor: "pointer", transition: "transform 0.2s" }}
           >
             <PokemonCard
+            id={pokemon.pokedex_id}
+
               name={pokemon.name.fr ?? "Nom inconnu"}
               image={pokemon.sprites.regular ?? ""}
               types={pokemon.types ?? []}

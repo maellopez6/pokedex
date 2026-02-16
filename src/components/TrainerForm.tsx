@@ -2,22 +2,31 @@ import { useState } from "react";
 import type { ITrainer } from "../types/trainer.type";
 
 interface Props {
-  getter: ITrainer[];
-  setter: React.Dispatch<React.SetStateAction<ITrainer[]>>;
+  trainers: ITrainer[]; // anciennement getter
+  setTrainers: React.Dispatch<React.SetStateAction<ITrainer[]>>; // anciennement setter
 }
 
-const TrainerForm: React.FC<Props> = ({ getter, setter }) => {
+const TrainerForm: React.FC<Props> = ({ trainers, setTrainers }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [trainerName, setTrainerName] = useState<string>("");
   const [trainerStarter, setTrainerStarter] = useState<string>("");
 
   const handleAddTrainer = () => {
-    if (!trainerName || !trainerStarter) return; // validation simple
+    // Validation simple
+    if (!trainerName || !trainerStarter) return;
+
     const newTrainer: ITrainer = {
       name: trainerName,
       starter: trainerStarter,
     };
-    setter([...getter, newTrainer]);
+
+    // S'assure que trainers est bien un tableau avant le spread
+    if (!Array.isArray(trainers)) {
+      console.error("trainers n'est pas un tableau !");
+      return;
+    }
+
+    setTrainers([...trainers, newTrainer]);
     setTrainerName("");
     setTrainerStarter("");
     setIsOpen(false);
